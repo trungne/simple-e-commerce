@@ -18,7 +18,9 @@
     "noUncheckedIndexedAccess": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "~interface/*": ["./interfaces/*"],
+      "~db/*": ["./drizzle/*"],
     }
   },
   "include": [

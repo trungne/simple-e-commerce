@@ -1,5 +1,6 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
+import "dotenv/config";
 
 export const env = createEnv({
   /**
@@ -8,6 +9,10 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
+    DB_USER: z.string(),
+    DB_PASS: z.string(),
+    DB_NAME: z.string(),
+    DB_PORT: z.string().transform((val) => parseInt(val, 10)),
   },
 
   /**
@@ -25,6 +30,10 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    DB_USER: process.env.DB_USER,
+    DB_PASS: process.env.DB_PASS,
+    DB_NAME: process.env.DB_NAME,
+    DB_PORT: process.env.DB_PORT,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
