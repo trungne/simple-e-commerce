@@ -4,15 +4,15 @@ import { buildIdColumn } from "~db/utils";
 
 export const products = pgTable("products", {
   id: buildIdColumn("PRD"),
-  name: text("name"),
-  description: text("description"),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
 
-  price: decimal("price"),
-  quantity: integer("quantity"),
+  price: decimal("price").notNull(),
+  quantity: integer("quantity").notNull(),
 
-  image: text("image"),
-  
-  category: text("category"),
+  image: text("image").notNull(),
+
+  category: text("category").notNull(),
 });
 
 export type Product = InferModel<typeof products>; // return type when queried
