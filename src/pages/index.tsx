@@ -51,7 +51,7 @@ export default function Home() {
             {product.data?.map((product) => {
             // TODO: implement: https://mantine.dev/core/card/
               return (
-                <div>
+                <div key={product.id}>
                   <Card style={{width: 180, height: 250}} shadow="sm" padding="sm" withBorder>
                     <Card.Section>
                       <Image src={product.image} height={100} alt="Image" />
