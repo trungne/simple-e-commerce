@@ -41,7 +41,8 @@ export default function Home() {
           })}
         >
           {/* Body */}
-          <Flex mih={50}
+          <Flex 
+            mih={50}
             gap="md"
             justify="center"
             align="flex-start"
@@ -49,10 +50,10 @@ export default function Home() {
             wrap="wrap"
           >
             {product.data?.map((product) => {
-            // TODO: implement: https://mantine.dev/core/card/
               return (
                 <div>
                   <Card style={{width: 180, height: 250}} shadow="sm" padding="sm" withBorder>
+
                     <Card.Section>
                       <Image src={product.image} height={100} alt="Image" />
                     </Card.Section>
@@ -63,9 +64,8 @@ export default function Home() {
 
                     <Text size="xs" color="dimmed" truncate>{product.description}</Text>
 
-                    <Button variant="light" color="blue" fullWidth mt="lg" radius="md">
-                      Buy now
-                    </Button>
+                    <Button variant="light" color="blue" fullWidth mt="lg" radius="md">Buy now</Button>
+
                   </Card>
                 </div>
               )
