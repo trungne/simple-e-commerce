@@ -1,5 +1,4 @@
-import { AppShell, Flex, Grid, Header, Navbar } from "@mantine/core";
-import { Card, Image, Text, Badge, Button, Group } from "@mantine/core";
+import { AppShell, Header, Navbar } from "@mantine/core";
 import Head from "next/head";
 import { api } from "~/utils/api";
 
@@ -41,37 +40,10 @@ export default function Home() {
           })}
         >
           {/* Body */}
-          <Flex mih={50}
-            gap="md"
-            justify="center"
-            align="flex-start"
-            direction="row"
-            wrap="wrap"
-          >
-            {product.data?.map((product) => {
+          {product.data?.map((product) => {
             // TODO: implement: https://mantine.dev/core/card/
-              return (
-                <div>
-                  <Card style={{width: 180, height: 250}} shadow="sm" padding="sm" withBorder>
-                    <Card.Section>
-                      <Image src={product.image} height={100} alt="Image" />
-                    </Card.Section>
-
-                    <Group position="apart" mt="md" mb="xs">
-                      <Text size="sm" weight={500} truncate>{product.name}</Text>
-                    </Group>
-
-                    <Text size="xs" color="dimmed" truncate>{product.description}</Text>
-
-                    <Button variant="light" color="blue" fullWidth mt="lg" radius="md">
-                      Buy now
-                    </Button>
-                  </Card>
-                </div>
-              )
-            })}
-          </Flex>
-
+            return <div key={product.id}>{product.image}</div>;
+          })}
         </AppShell>
       </main>
     </>
