@@ -51,7 +51,7 @@ export default function Home() {
           >
             {product.data?.map((product) => {
               return (
-                <div>
+                <div key={product.id}>
                   <Card style={{width: 180, height: 250}} shadow="sm" padding="sm" withBorder>
 
                     <Card.Section>
