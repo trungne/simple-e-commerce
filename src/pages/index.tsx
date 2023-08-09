@@ -1,5 +1,13 @@
-import { AppShell, Flex, Grid, Header, Navbar } from "@mantine/core";
-import { Card, Image, Text, Badge, Button, Group } from "@mantine/core";
+import {
+  AppShell,
+  Box,
+  Flex,
+  Header,
+  Navbar,
+  ScrollArea,
+  Space,
+} from "@mantine/core";
+import { Card, Image, Text, Button, Group } from "@mantine/core";
 import Head from "next/head";
 import { api } from "~/utils/api";
 
@@ -18,12 +26,36 @@ export default function Home() {
         <AppShell
           padding="md"
           navbar={
-            <Navbar width={{ base: 300 }} height={500} p="xs">
-              {/* Navbar content */}
-              {category.data?.map((category, idx) => {
-                // TODO: use button component https://mantine.dev/core/button/
-                return <h2 key={idx}>{category.name}</h2>;
-              })}
+            <Navbar width={{ base: 300 }} height={600} p="xs">
+              <Navbar.Section mt="xs">{/* Header with logo */}</Navbar.Section>
+
+              <Box>
+                <Text
+                  align="center"
+                  fw={700}
+                  fz="xl"
+                  variant="gradient"
+                  gradient={{ from: "green", to: "blue", deg: 45 }}
+                >
+                  Categories
+                </Text>
+                <Space h="md"></Space>
+              </Box>
+
+              <Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
+                {/* Navbar content */}
+                <Button.Group orientation="vertical">
+                  {category.data?.map((category, idx) => {
+                    return (
+                      <Button key={idx} variant="default">
+                        {category.name}
+                      </Button>
+                    );
+                  })}
+                </Button.Group>
+              </Navbar.Section>
+
+              <Navbar.Section>{/* Footer with user */}</Navbar.Section>
             </Navbar>
           }
           header={
@@ -41,7 +73,7 @@ export default function Home() {
           })}
         >
           {/* Body */}
-          <Flex 
+          <Flex
             mih={50}
             gap="md"
             justify="center"
@@ -52,26 +84,40 @@ export default function Home() {
             {product.data?.map((product) => {
               return (
                 <div key={product.id}>
-                  <Card style={{width: 180, height: 250}} shadow="sm" padding="sm" withBorder>
-
+                  <Card
+                    style={{ width: 180, height: 250 }}
+                    shadow="sm"
+                    padding="sm"
+                    withBorder
+                  >
                     <Card.Section>
                       <Image src={product.image} height={100} alt="Image" />
                     </Card.Section>
 
                     <Group position="apart" mt="md" mb="xs">
-                      <Text size="sm" weight={500} truncate>{product.name}</Text>
+                      <Text size="sm" weight={500} truncate>
+                        {product.name}
+                      </Text>
                     </Group>
 
-                    <Text size="xs" color="dimmed" truncate>{product.description}</Text>
+                    <Text size="xs" color="dimmed" truncate>
+                      {product.description}
+                    </Text>
 
-                    <Button variant="light" color="blue" fullWidth mt="lg" radius="md">Buy now</Button>
-
+                    <Button
+                      variant="light"
+                      color="blue"
+                      fullWidth
+                      mt="lg"
+                      radius="md"
+                    >
+                      Buy now
+                    </Button>
                   </Card>
                 </div>
-              )
+              );
             })}
           </Flex>
-
         </AppShell>
       </main>
     </>
