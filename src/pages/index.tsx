@@ -26,7 +26,7 @@ export default function Home() {
         <AppShell
           padding="md"
           navbar={
-            <Navbar width={{ base: 300 }} height={600} p="xs">
+            <Navbar width={{ base: 220 }} height={600} p="xs">
               <Navbar.Section mt="xs">{/* Header with logo */}</Navbar.Section>
 
               <Box>
@@ -47,7 +47,7 @@ export default function Home() {
                 <Button.Group orientation="vertical">
                   {category.data?.map((category, idx) => {
                     return (
-                      <Button key={idx} variant="default">
+                      <Button key={idx} variant="subtle" color="dark">
                         {category.name}
                       </Button>
                     );
