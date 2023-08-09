@@ -1,6 +1,7 @@
 import {
   AppShell,
   Box,
+  Divider,
   Flex,
   Header,
   Navbar,
@@ -9,10 +10,17 @@ import {
 } from "@mantine/core";
 import { Card, Image, Text, Button, Group } from "@mantine/core";
 import Head from "next/head";
+import { useState } from "react";
 import { api } from "~/utils/api";
 
 export default function Home() {
-  const product = api.product.productList.useQuery({});
+  const [categoryFilter, setCategoryFilter] = useState<string | undefined>(
+    undefined
+  );
+
+  const product = api.product.productList.useQuery({
+    category: categoryFilter,
+  });
   const category = api.product.categoryList.useQuery();
 
   return (
@@ -26,7 +34,7 @@ export default function Home() {
         <AppShell
           padding="md"
           navbar={
-            <Navbar width={{ base: 220 }} height={600} p="xs">
+            <Navbar width={{ base: 220 }} p="xs">
               <Navbar.Section mt="xs">{/* Header with logo */}</Navbar.Section>
 
               <Box>
@@ -41,13 +49,23 @@ export default function Home() {
                 </Text>
                 <Space h="md"></Space>
               </Box>
-
+              <Divider />
               <Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
                 {/* Navbar content */}
                 <Button.Group orientation="vertical">
                   {category.data?.map((category, idx) => {
+                    const isSelected = categoryFilter === category.name;
+
                     return (
-                      <Button key={idx} variant="subtle" color="dark">
+                      <Button
+                        onClick={() => {
+                          setCategoryFilter(category.name);
+                        }}
+                        
+                        key={idx}
+                        variant="subtle"
+                        color={isSelected ? "blue" : "dark"}
+                      >
                         {category.name}
                       </Button>
                     );
