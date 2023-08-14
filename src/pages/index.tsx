@@ -15,6 +15,7 @@ import { useDisclosure } from "@mantine/hooks";
 
 import Head from "next/head";
 import { useState } from "react";
+import type { Product } from "~/types/product";
 import { api } from "~/utils/api";
 
 export default function Home() {
@@ -28,6 +29,8 @@ export default function Home() {
   const category = api.product.categoryList.useQuery();
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const [productToShowInDialog, setProductToShowInDialog] = useState<Product>();
 
   //Temporary data for one product, when user click on one card
   const [productCategory, setProductCategory] = useState("");
@@ -158,13 +161,7 @@ export default function Home() {
                 <div key={product.id}>
                   <Card
                     onClick={() => {
-                      setIsOpen(true);
-                      setProductCategory(product.category);
-                      setProductDescription(product.description);
-                      setProductImage(product.image);
-                      setProductName(product.name);
-                      setProductPrice(product.price);
-                      setProductQuantity(product.quantity);
+                      setProductToShowInDialog(product);
                     }}
                     style={{ width: 180, height: 250 }}
                     shadow="sm"
@@ -201,26 +198,23 @@ export default function Home() {
           </Flex>
 
           <Dialog
-            opened={isOpen}
+            opened={!!productToShowInDialog} // product is not undefined
             withCloseButton
             onClose={() => {
-              setIsOpen(false);
-
-              //Clear data
-              clearTempData();
+              setProductToShowInDialog(undefined);
             }}
           >
             <Text size="sm" mb="xs" weight={500}>
-              Name: {productName}
+              Name: {productToShowInDialog?.name}
             </Text>
             <Text size="sm" mb="xs" weight={500}>
-              Price: {productPrice}
+              Price: {productToShowInDialog?.price}
             </Text>
             <Text size="sm" mb="xs" weight={500}>
-              Quantity: {productQuantity}
+              Quantity: {productToShowInDialog?.quantity}
             </Text>
             <Text size="sm" mb="xs" weight={500}>
-              Category: {productCategory}
+              Category: {productToShowInDialog?.category}
             </Text>
           </Dialog>
         </AppShell>
