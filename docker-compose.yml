@@ -17,6 +17,27 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  app:
+    depends_on:
+      - postgres_db
+    platform: "linux/amd64"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_CLIENTVAR: "clientvar"
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    image: simple-e-commerce
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=5432
+      - DB_DOMAIN=postgres_db
+      - NODE_ENV=production
 networks:
   default:
     name: simple-e-commerce-network
