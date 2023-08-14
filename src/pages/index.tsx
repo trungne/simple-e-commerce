@@ -5,6 +5,7 @@ import {
   Flex,
   Header,
   Navbar,
+  Pagination,
   ScrollArea,
   Space,
 } from "@mantine/core";
@@ -18,8 +19,12 @@ export default function Home() {
     undefined
   );
 
-  const product = api.product.productList.useQuery({
+  const [page, setPage] = useState(0);
+
+  const { data: productListResponse } = api.product.productList.useQuery({
     category: categoryFilter,
+    page,
+    perPage: 12,
   });
   const category = api.product.categoryList.useQuery();
 
@@ -61,7 +66,6 @@ export default function Home() {
                         onClick={() => {
                           setCategoryFilter(category.name);
                         }}
-                        
                         key={idx}
                         variant="subtle"
                         color={isSelected ? "blue" : "dark"}
@@ -99,42 +103,50 @@ export default function Home() {
             direction="row"
             wrap="wrap"
           >
-            {product.data?.map((product) => {
+            {productListResponse?.data.map((product) => {
               return (
-                <div key={product.id}>
-                  <Card
-                    style={{ width: 180, height: 250 }}
-                    shadow="sm"
-                    padding="sm"
-                    withBorder
-                  >
-                    <Card.Section>
-                      <Image src={product.image} height={100} alt="Image" />
-                    </Card.Section>
+                <Card
+                  key={product.id}
+                  style={{ height: 250, flexBasis: "30%" }}
+                  shadow="sm"
+                  padding="sm"
+                  withBorder
+                >
+                  <Card.Section>
+                    <Image src={product.image} height={100} alt="Image" />
+                  </Card.Section>
 
-                    <Group position="apart" mt="md" mb="xs">
-                      <Text size="sm" weight={500} truncate>
-                        {product.name}
-                      </Text>
-                    </Group>
-
-                    <Text size="xs" color="dimmed" truncate>
-                      {product.description}
+                  <Group position="apart" mt="md" mb="xs">
+                    <Text size="sm" weight={500} truncate>
+                      {product.name}
                     </Text>
+                  </Group>
 
-                    <Button
-                      variant="light"
-                      color="blue"
-                      fullWidth
-                      mt="lg"
-                      radius="md"
-                    >
-                      Buy now
-                    </Button>
-                  </Card>
-                </div>
+                  <Text size="xs" color="dimmed" truncate>
+                    {product.description}
+                  </Text>
+
+                  <Button
+                    variant="light"
+                    color="blue"
+                    fullWidth
+                    mt="lg"
+                    radius="md"
+                  >
+                    Buy now
+                  </Button>
+                </Card>
               );
             })}
+          </Flex>
+          <Flex className="mt-auto" justify="center">
+            <Pagination
+              value={page + 1}
+              onChange={(page) => {
+                setPage(page - 1);
+              }}
+              total={productListResponse?.totalPage ?? 0}
+            />
           </Flex>
         </AppShell>
       </main>

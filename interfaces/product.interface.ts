@@ -14,4 +14,6 @@ export interface Product {
 
 export interface ProductQuery {
   category?: string;
+  page?: number;
+  perPage?: number;
 }
