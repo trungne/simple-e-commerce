@@ -160,6 +160,9 @@ export default function Home() {
             {productListResponse?.data.map((product) => {
               return (
                 <Card
+                  onClick={() => {
+                    setProductToShowInDialog(product);
+                  }}
                   key={product.id}
                   style={{ height: 250, flexBasis: "30%" }}
                   shadow="sm"
@@ -202,6 +205,26 @@ export default function Home() {
               total={productListResponse?.totalPage ?? 0}
             />
           </Flex>
+          <Dialog
+            opened={!!productToShowInDialog}
+            withCloseButton
+            onClose={() => {
+              setProductToShowInDialog(undefined);
+            }}
+          >
+            <Text size="sm" mb="xs" weight={500}>
+              Name: {productToShowInDialog?.name}
+            </Text>
+            <Text size="sm" mb="xs" weight={500}>
+              Price: {productToShowInDialog?.price}
+            </Text>
+            <Text size="sm" mb="xs" weight={500}>
+              Quantity: {productToShowInDialog?.quantity}
+            </Text>
+            <Text size="sm" mb="xs" weight={500}>
+              Category: {productToShowInDialog?.category}
+            </Text>
+          </Dialog>
         </AppShell>
       </main>
     </>
