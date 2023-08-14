@@ -5,10 +5,12 @@ import {
   Divider,
   Flex,
   Header,
+  Modal,
   Navbar,
   Pagination,
   ScrollArea,
   Space,
+  Title
 } from "@mantine/core";
 import { Card, Image, Text, Button, Group } from "@mantine/core";
 
@@ -157,26 +159,34 @@ export default function Home() {
               total={productListResponse?.totalPage ?? 0}
             />
           </Flex>
-          <Dialog
+          <Modal
+            title={<Title order={3}><Text c='blue'>{productToShowInDialog?.name}</Text></Title>}
+            size="lg" radius="md"
             opened={!!productToShowInDialog}
             withCloseButton
             onClose={() => {
               setProductToShowInDialog(undefined);
             }}
+            centered
           >
+            
             <Text size="sm" mb="xs" weight={500}>
-              Name: {productToShowInDialog?.name}
+              <Text span c='blue' fw={700}>Description: </Text> 
+              {productToShowInDialog?.description}
             </Text>
             <Text size="sm" mb="xs" weight={500}>
-              Price: {productToShowInDialog?.price}
+              <Text span c='blue' fw={700}>Price: </Text> 
+              {productToShowInDialog?.price}
             </Text>
             <Text size="sm" mb="xs" weight={500}>
-              Quantity: {productToShowInDialog?.quantity}
+              <Text span c='blue' fw={700}>Quantity: </Text>  
+              {productToShowInDialog?.quantity}
             </Text>
             <Text size="sm" mb="xs" weight={500}>
-              Category: {productToShowInDialog?.category}
+              <Text span c='blue' fw={700}>Category: </Text>   
+              {productToShowInDialog?.category}
             </Text>
-          </Dialog>
+          </Modal>
         </AppShell>
       </main>
     </>
