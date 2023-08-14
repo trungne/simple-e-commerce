@@ -9,10 +9,8 @@ import {
   Pagination,
   ScrollArea,
   Space,
-  TextInput,
 } from "@mantine/core";
 import { Card, Image, Text, Button, Group } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 
 import Head from "next/head";
 import { useState } from "react";
@@ -33,54 +31,8 @@ export default function Home() {
   });
   const category = api.product.categoryList.useQuery();
 
-  const [isOpen, setIsOpen] = useState(false);
-
   const [productToShowInDialog, setProductToShowInDialog] = useState<Product>();
 
-  //Temporary data for one product, when user click on one card
-  const [productCategory, setProductCategory] = useState("");
-  const [productDescription, setProductDescription] = useState("");
-  const [productImage, setProductImage] = useState("");
-  const [productName, setProductName] = useState("");
-  const [productPrice, setProductPrice] = useState("");
-  const [productQuantity, setProductQuantity] = useState(0);
-
-  //Function to set temp data for one product
-  const saveTempData = (
-    category: string,
-    description: string,
-    image: string,
-    name: string,
-    price: string,
-    quantity: number
-  ) => {
-    setProductCategory(category);
-    setProductDescription(description);
-    setProductImage(image);
-    setProductName(name);
-    setProductPrice(price);
-    setProductQuantity(quantity);
-  };
-
-  //Function to clear temp data for one product
-  const clearTempData = () => {
-    setProductCategory("");
-    setProductDescription("");
-    setProductImage("");
-    setProductName("");
-    setProductPrice("");
-    setProductQuantity(0);
-  };
-
-  //test display image
-  const displayTempData = () => {
-    console.log("product category: " + productCategory);
-    console.log("product description: " + productDescription);
-    console.log("product image: " + productImage);
-    console.log("product name: " + productName);
-    console.log("product price: " + productPrice);
-    console.log("product quantity: " + productQuantity);
-  };
 
   return (
     <>
