@@ -1,6 +1,6 @@
 import { Modal, Text, Title } from "@mantine/core";
 
-export type ModalProps = {
+type ModalProps = {
     name?: string 
     description?: string 
     price?: string 

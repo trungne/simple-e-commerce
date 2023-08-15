@@ -2,7 +2,7 @@ import { Card, Group,Text,Button,Image } from "@mantine/core";
 import type { MouseEventHandler } from "react";
 import type { Product } from "~/types/product";
 
-export type Props = {
+type Props = {
     product: Product
     onClick?: MouseEventHandler<HTMLDivElement> | undefined;
 }
