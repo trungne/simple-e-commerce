@@ -13,6 +13,7 @@ export const env = createEnv({
     DB_PASS: z.string(),
     DB_NAME: z.string(),
     DB_PORT: z.string().transform((val) => parseInt(val, 10)),
+    DB_DOMAIN: z.string(),
   },
 
   /**
@@ -34,6 +35,7 @@ export const env = createEnv({
     DB_PASS: process.env.DB_PASS,
     DB_NAME: process.env.DB_NAME,
     DB_PORT: process.env.DB_PORT,
+    DB_DOMAIN: process.env.DB_DOMAIN,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
