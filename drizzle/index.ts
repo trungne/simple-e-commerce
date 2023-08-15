@@ -5,7 +5,7 @@ import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import * as schema from "./schema";
 import { env } from "~/env.mjs";
 
-export const connectionString = `postgres://postgres:${env.DB_PASS}@localhost:${env.DB_PORT}/${env.DB_NAME}`;
+export const connectionString = `postgres://postgres:${env.DB_PASS}@${env.DB_DOMAIN}:${env.DB_PORT}/${env.DB_NAME}`;
 
 export const postgresClient = postgres(connectionString);
 
