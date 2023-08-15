@@ -8,10 +8,15 @@ import {
   Pagination,
   ScrollArea,
   Space,
+  Text, 
+  Button
 } from "@mantine/core";
-import { Card, Image, Text, Button, Group } from "@mantine/core";
+
 import Head from "next/head";
 import { useState } from "react";
+import { ProductCard } from "~/components/ProductCard";
+import { ProductModal } from "~/components/ProductModal";
+import type { Product } from "~/types/product";
 import { api } from "~/utils/api";
 
 export default function Home() {
@@ -27,6 +32,9 @@ export default function Home() {
     perPage: 12,
   });
   const category = api.product.categoryList.useQuery();
+
+  const [productToShowInDialog, setProductToShowInDialog] = useState<Product>();
+
 
   return (
     <>
@@ -105,37 +113,7 @@ export default function Home() {
           >
             {productListResponse?.data.map((product) => {
               return (
-                <Card
-                  key={product.id}
-                  style={{ height: 250, flexBasis: "30%" }}
-                  shadow="sm"
-                  padding="sm"
-                  withBorder
-                >
-                  <Card.Section>
-                    <Image src={product.image} height={100} alt="Image" />
-                  </Card.Section>
-
-                  <Group position="apart" mt="md" mb="xs">
-                    <Text size="sm" weight={500} truncate>
-                      {product.name}
-                    </Text>
-                  </Group>
-
-                  <Text size="xs" color="dimmed" truncate>
-                    {product.description}
-                  </Text>
-
-                  <Button
-                    variant="light"
-                    color="blue"
-                    fullWidth
-                    mt="lg"
-                    radius="md"
-                  >
-                    Buy now
-                  </Button>
-                </Card>
+                <ProductCard key={product.id} product={product} onClick={() => {setProductToShowInDialog(product)}}  />
               );
             })}
           </Flex>
@@ -148,6 +126,17 @@ export default function Home() {
               total={productListResponse?.totalPage ?? 0}
             />
           </Flex>
+          <ProductModal
+            name={productToShowInDialog?.name}
+            description={productToShowInDialog?.description}
+            price={productToShowInDialog?.price}
+            quantity={productToShowInDialog?.quantity}
+            category={productToShowInDialog?.category}
+            opened={!!productToShowInDialog}
+            onClose={() => {
+              setProductToShowInDialog(undefined);
+            }}
+            />
         </AppShell>
       </main>
     </>
