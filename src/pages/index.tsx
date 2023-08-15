@@ -114,7 +114,7 @@ export default function Home() {
           >
             {productListResponse?.data.map((product) => {
               return (
-                <ProductCard key={product.id} product={product} onClick={() => setProductToShowInDialog(product)}  />
+                <ProductCard key={product.id} product={product} onClick={() => {setProductToShowInDialog(product)}}  />
               );
             })}
           </Flex>

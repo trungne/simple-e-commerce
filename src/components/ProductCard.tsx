@@ -1,19 +1,20 @@
 import { Card, Group,Text,Button,Image } from "@mantine/core";
+import type { MouseEventHandler } from "react";
 import type { Product } from "~/types/product";
 
 export type Props = {
     product: Product
-    onClick: (product: Product) => void
+    onClick?: MouseEventHandler<HTMLDivElement> | undefined;
 }
 
 export const ProductCard = ({product, onClick}: Props) => {
   return (
     <Card
-      key={product.id}
       style={{ height: 250, flexBasis: "30%" }}
       shadow="sm"
       padding="sm"
       withBorder
+      onClick={onClick}
     >
       <Card.Section>
         <Image src={product.image} height={100} alt="Image" />
