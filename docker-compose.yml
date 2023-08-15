@@ -37,6 +37,20 @@ services:
       - DB_PORT=5432
       - DB_DOMAIN=postgres_db
       - NODE_ENV=production
+  migration:
+    depends_on:
+      - postgres_db
+      - app
+    build:
+      context: .
+      dockerfile: Dockerfile.migration
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=5432
+      - DB_DOMAIN=postgres_db
+      - NODE_ENV=production
 networks:
   default:
     name: simple-e-commerce-network

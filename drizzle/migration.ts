@@ -1,5 +1,4 @@
 import { migrate } from "drizzle-orm/postgres-js/migrator";
-import "dotenv/config";
 import { db } from "./index";
 
 migrate(db, { migrationsFolder: "./drizzle/migrations" })
