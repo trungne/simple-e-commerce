@@ -26,7 +26,7 @@ export const ProductCard = ({product, onClick}: Props) => {
         </Text>
       </Group>
 
-      <Text size="xs" color="dimmed" truncate>
+      <Text size="xs" color="dimmed" lineClamp={2}>
         {product.description}
       </Text>
 

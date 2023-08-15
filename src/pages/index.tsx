@@ -1,22 +1,21 @@
 import {
   AppShell,
   Box,
-  Dialog,
   Divider,
   Flex,
   Header,
-  Modal,
   Navbar,
   Pagination,
   ScrollArea,
   Space,
-  Title
+  Text, 
+  Button
 } from "@mantine/core";
-import { Card, Image, Text, Button, Group } from "@mantine/core";
 
 import Head from "next/head";
 import { useState } from "react";
 import { ProductCard } from "~/components/ProductCard";
+import { ProductModal } from "~/components/ProductModal";
 import type { Product } from "~/types/product";
 import { api } from "~/utils/api";
 
@@ -127,34 +126,17 @@ export default function Home() {
               total={productListResponse?.totalPage ?? 0}
             />
           </Flex>
-          <Modal
-            title={<Title order={3}><Text c='blue'>{productToShowInDialog?.name}</Text></Title>}
-            size="lg" radius="md"
+          <ProductModal
+            name={productToShowInDialog?.name}
+            description={productToShowInDialog?.description}
+            price={productToShowInDialog?.price}
+            quantity={productToShowInDialog?.quantity}
+            category={productToShowInDialog?.category}
             opened={!!productToShowInDialog}
-            withCloseButton
             onClose={() => {
               setProductToShowInDialog(undefined);
             }}
-            centered
-          >
-            
-            <Text size="sm" mb="xs" weight={500}>
-              <Text span c='blue' fw={700}>Description: </Text> 
-              {productToShowInDialog?.description}
-            </Text>
-            <Text size="sm" mb="xs" weight={500}>
-              <Text span c='blue' fw={700}>Price: </Text> 
-              {productToShowInDialog?.price}
-            </Text>
-            <Text size="sm" mb="xs" weight={500}>
-              <Text span c='blue' fw={700}>Quantity: </Text>  
-              {productToShowInDialog?.quantity}
-            </Text>
-            <Text size="sm" mb="xs" weight={500}>
-              <Text span c='blue' fw={700}>Category: </Text>   
-              {productToShowInDialog?.category}
-            </Text>
-          </Modal>
+            />
         </AppShell>
       </main>
     </>
