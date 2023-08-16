@@ -1,0 +1,21 @@
+# Dockerfile
+
+##### DEPENDENCIES
+
+FROM --platform=$BUILDPLATFORM node:alpine AS deps
+
+WORKDIR /app
+
+RUN yarn add drizzle-orm postgres dotenv tsx
+
+
+##### BUILDER
+
+FROM --platform=$BUILDPLATFORM node:alpine AS builder
+
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+
+CMD ["yarn", "migration:run"]
