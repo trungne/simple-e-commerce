@@ -17,6 +17,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    network_mode: host
 
   app:
     depends_on:
@@ -35,8 +36,10 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_NAME}
       - DB_PORT=5432
-      - DB_DOMAIN=postgres_db
+      - DB_DOMAIN=${DB_DOMAIN}
       - NODE_ENV=production
+    network_mode: host
+
   migration:
     depends_on:
       - postgres_db
@@ -49,8 +52,28 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_NAME}
       - DB_PORT=5432
-      - DB_DOMAIN=postgres_db
+      - DB_DOMAIN=${DB_DOMAIN}
       - NODE_ENV=production
+    network_mode: host
+
+  ngrok:
+    depends_on:
+      - app
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+      - "--authtoken"
+      - "${NGROK_AUTH_TOKEN}"
+    volumes:
+      - ./ngrok.yml:/etc/ngrok.yml
+    ports:
+      - 4040:4040
+    network_mode: host
+
 networks:
   default:
     name: simple-e-commerce-network
