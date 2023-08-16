@@ -8,14 +8,17 @@ import {
   Pagination,
   ScrollArea,
   Space,
-  Text, 
-  Button
+  Text,
+  Button,
 } from "@mantine/core";
+import { useDebouncedState } from "@mantine/hooks";
 
 import Head from "next/head";
 import { useState } from "react";
 import { ProductCard } from "~/components/ProductCard";
+import { ProductCategory } from "~/components/ProductCategory";
 import { ProductModal } from "~/components/ProductModal";
+import { SearchInput } from "~/components/SearchInput";
 import type { Product } from "~/types/product";
 import { api } from "~/utils/api";
 
@@ -25,8 +28,10 @@ export default function Home() {
   );
 
   const [page, setPage] = useState(0);
+  const [searchInput, setSearchInput] = useDebouncedState("", 200);
 
   const { data: productListResponse } = api.product.productList.useQuery({
+    name: searchInput,
     category: categoryFilter,
     page,
     perPage: 12,
@@ -34,7 +39,6 @@ export default function Home() {
   const category = api.product.categoryList.useQuery();
 
   const [productToShowInDialog, setProductToShowInDialog] = useState<Product>();
-
 
   return (
     <>
@@ -51,6 +55,7 @@ export default function Home() {
               <Navbar.Section mt="xs">{/* Header with logo */}</Navbar.Section>
 
               <Box>
+                <SearchInput onChange={setSearchInput} />
                 <Text
                   align="center"
                   fw={700}
@@ -70,16 +75,19 @@ export default function Home() {
                     const isSelected = categoryFilter === category.name;
 
                     return (
-                      <Button
-                        onClick={() => {
-                          setCategoryFilter(category.name);
-                        }}
+                      <ProductCategory
                         key={idx}
-                        variant="subtle"
-                        color={isSelected ? "blue" : "dark"}
-                      >
-                        {category.name}
-                      </Button>
+                        categoryName={category.name}
+                        isSelected={isSelected}
+                        onChange={(categoryName) => {
+                          if (isSelected) {
+                            setCategoryFilter(undefined);
+                            return;
+                          }
+
+                          setCategoryFilter(categoryName);
+                        }}
+                      />
                     );
                   })}
                 </Button.Group>
@@ -88,11 +96,11 @@ export default function Home() {
               <Navbar.Section>{/* Footer with user */}</Navbar.Section>
             </Navbar>
           }
-          header={
-            <Header height={60} p="xs">
-              {/* Header content */}
-            </Header>
-          }
+          // header={
+          //   <Header height={60} p="xs">
+          //     {/* Header content */}
+          //   </Header>
+          // }
           styles={(theme) => ({
             main: {
               backgroundColor:
@@ -113,7 +121,13 @@ export default function Home() {
           >
             {productListResponse?.data.map((product) => {
               return (
-                <ProductCard key={product.id} product={product} onClick={() => {setProductToShowInDialog(product)}}  />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onClick={() => {
+                    setProductToShowInDialog(product);
+                  }}
+                />
               );
             })}
           </Flex>
@@ -136,7 +150,7 @@ export default function Home() {
             onClose={() => {
               setProductToShowInDialog(undefined);
             }}
-            />
+          />
         </AppShell>
       </main>
     </>

@@ -10,4 +10,5 @@ export const postgresClient = postgres(connectionString);
 
 export const db: PostgresJsDatabase<typeof schema> = drizzle(postgresClient, {
   schema,
+  logger: true,
 });
