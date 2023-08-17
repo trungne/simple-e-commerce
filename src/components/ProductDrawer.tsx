@@ -107,6 +107,10 @@ export const ProductDrawer = () => {
 
   return (
     <Drawer
+      transitionProps={{
+        duration: 0,
+        transition: "fade",
+      }}
       size="xl"
       opened={isProductDrawerOpen}
       onClose={handleClose}
