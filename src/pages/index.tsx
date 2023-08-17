@@ -1,34 +1,36 @@
 import {
   AppShell,
   Box,
-  Divider,
   Flex,
-  Header,
   Navbar,
   Pagination,
   ScrollArea,
-  Space,
   Text,
   Button,
 } from "@mantine/core";
 import { useDebouncedState } from "@mantine/hooks";
+import { useAtom } from "jotai";
 
 import Head from "next/head";
 import { useState } from "react";
 import { ProductCard } from "~/components/ProductCard";
 import { ProductCategory } from "~/components/ProductCategory";
+import { ProductDrawer } from "~/components/ProductDrawer";
 import { ProductModal } from "~/components/ProductModal";
 import { SearchInput } from "~/components/SearchInput";
+import { isProductDrawerOpenAtom } from "~/hooks/drawer";
 import type { Product } from "~/types/product";
 import { api } from "~/utils/api";
 
 export default function Home() {
+  const [, setIsProductDrawerOpen] = useAtom(isProductDrawerOpenAtom);
+
   const [categoryFilter, setCategoryFilter] = useState<string | undefined>(
     undefined
   );
 
   const [page, setPage] = useState(0);
-  const [searchInput, setSearchInput] = useDebouncedState("", 200);
+  const [searchInput, setSearchInput] = useDebouncedState("", 500);
 
   const { data: productListResponse } = api.product.productList.useQuery({
     name: searchInput,
@@ -36,7 +38,7 @@ export default function Home() {
     page,
     perPage: 12,
   });
-  const category = api.product.categoryList.useQuery();
+  const { data: categoryResponse } = api.product.categoryList.useQuery();
 
   const [productToShowInDialog, setProductToShowInDialog] = useState<Product>();
 
@@ -52,11 +54,19 @@ export default function Home() {
           padding="md"
           navbar={
             <Navbar width={{ base: 220 }} p="xs">
-              <Navbar.Section mt="xs">{/* Header with logo */}</Navbar.Section>
+              <Navbar.Section mt="xs">
+                <Box mt="xs" mb="xs">
+                  <SearchInput
+                    onChange={(searchText) => {
+                      setPage(0);
+                      setSearchInput(searchText);
+                    }}
+                  />
+                </Box>
 
-              <Box>
-                <SearchInput onChange={setSearchInput} />
                 <Text
+                  mt="xs"
+                  mb="xs"
                   align="center"
                   fw={700}
                   fz="xl"
@@ -65,21 +75,28 @@ export default function Home() {
                 >
                   Categories
                 </Text>
-                <Space h="md"></Space>
-              </Box>
-              <Divider />
-              <Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
+              </Navbar.Section>
+
+              <Navbar.Section
+                className="rounded-md bg-slate-100"
+                grow
+                component={ScrollArea}
+                mx="-xs"
+                px="xs"
+              >
                 {/* Navbar content */}
                 <Button.Group orientation="vertical">
-                  {category.data?.map((category, idx) => {
+                  {categoryResponse?.map((category, idx) => {
                     const isSelected = categoryFilter === category.name;
 
                     return (
                       <ProductCategory
+                        count={category.count}
                         key={idx}
                         categoryName={category.name}
                         isSelected={isSelected}
                         onChange={(categoryName) => {
+                          setPage(0);
                           if (isSelected) {
                             setCategoryFilter(undefined);
                             return;
@@ -93,7 +110,19 @@ export default function Home() {
                 </Button.Group>
               </Navbar.Section>
 
-              <Navbar.Section>{/* Footer with user */}</Navbar.Section>
+              <Navbar.Section mt="xs">
+                <Flex justify="center">
+                  <Button
+                    onClick={() => {
+                      setIsProductDrawerOpen(true);
+                    }}
+                    variant="fill"
+                    className="grow bg-green-400 text-white"
+                  >
+                    Create
+                  </Button>
+                </Flex>
+              </Navbar.Section>
             </Navbar>
           }
           // header={
@@ -111,46 +140,45 @@ export default function Home() {
           })}
         >
           {/* Body */}
-          <Flex
-            mih={50}
-            gap="md"
-            justify="center"
-            align="flex-start"
-            direction="row"
-            wrap="wrap"
-          >
-            {productListResponse?.data.map((product) => {
-              return (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onClick={() => {
-                    setProductToShowInDialog(product);
-                  }}
-                />
-              );
-            })}
+          <Flex h="100%" direction="column">
+            {productListResponse?.data.length === 0 && (
+              <Text align="center" size="lg">
+                No Products Found!
+              </Text>
+            )}
+            <Box className=" grid w-full grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+              {productListResponse?.data.map((product) => {
+                return (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onClick={() => {
+                      setProductToShowInDialog(product);
+                    }}
+                  />
+                );
+              })}
+            </Box>
+
+            <Flex className="mt-auto" justify="center">
+              <Pagination
+                value={page + 1}
+                onChange={(page) => {
+                  setPage(page - 1);
+                }}
+                total={productListResponse?.totalPage ?? 0}
+              />
+            </Flex>
           </Flex>
-          <Flex className="mt-auto" justify="center">
-            <Pagination
-              value={page + 1}
-              onChange={(page) => {
-                setPage(page - 1);
-              }}
-              total={productListResponse?.totalPage ?? 0}
-            />
-          </Flex>
+
           <ProductModal
-            name={productToShowInDialog?.name}
-            description={productToShowInDialog?.description}
-            price={productToShowInDialog?.price}
-            quantity={productToShowInDialog?.quantity}
-            category={productToShowInDialog?.category}
-            opened={!!productToShowInDialog}
+            product={productToShowInDialog}
             onClose={() => {
               setProductToShowInDialog(undefined);
             }}
           />
+
+          <ProductDrawer />
         </AppShell>
       </main>
     </>
