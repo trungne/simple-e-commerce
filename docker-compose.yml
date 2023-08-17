@@ -17,7 +17,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    network_mode: host
 
   app:
     depends_on:
@@ -36,9 +35,8 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_NAME}
       - DB_PORT=5432
-      - DB_DOMAIN=${DB_DOMAIN}
+      - DB_DOMAIN=postgres_db
       - NODE_ENV=production
-    network_mode: host
 
   migration:
     depends_on:
@@ -52,11 +50,12 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_NAME=${DB_NAME}
       - DB_PORT=5432
-      - DB_DOMAIN=${DB_DOMAIN}
+      - DB_DOMAIN=postgres_db
       - NODE_ENV=production
-    network_mode: host
 
   ngrok:
+    profiles:
+      - live
     depends_on:
       - app
     image: ngrok/ngrok:latest
