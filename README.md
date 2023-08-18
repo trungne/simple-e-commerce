@@ -1,28 +1,47 @@
-# Create T3 App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+# Installation
 
-## What's next? How do I make an app with this?
+## Environment file
+Create a .env file with these value
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+Note that `DB_USER`, `DB_PASS`, `DB_NAME`, `DB_PORT` are arbitrary. You can enter values of your choice.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+Obtain `NGROK_AUTH_TOKEN` [here](https://ngrok.com/docs/secure-tunnels/ngrok-agent/tunnel-authtokens/) if you want to deploy live.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+```
+DB_USER=postgres
+DB_PASS=123456
+DB_NAME=simple-e-commerce
+DB_PORT=3004
+DB_DOMAIN=localhost
+NODE_ENV=development
 
-## Learn More
+NGROK_AUTH_TOKEN=
+```
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Build Dockerfiles
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Build the docker images using
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+`docker compose build`
 
-## How do I deploy this?
+If a permission error occurs, try
+`sudo docker compose build`
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## Start docker compose
+
+### Local deployment
+Start all the services using:
+
+`docker compose up`
+
+The web application is avaiable at `localhost:3000`
+
+### Live deployment
+If you have the `NGROK_AUTH_TOKEN` and want to deploy live. Use:
+
+`docker compose --profile live up`
+
+## Seed data
+To seed data, run `yarn seed:product` or `npm seed:product` on your local machine.
+make sure you have `yarn` or `npm` installed
