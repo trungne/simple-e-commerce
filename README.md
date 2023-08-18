@@ -46,6 +46,8 @@ If you have the `NGROK_AUTH_TOKEN` and want to deploy live. Use:
 To seed data, run these two commands on your local machine.
 
 - `yarn install` or `npm install`
-- `yarn seed:product` or `npm seed:product` 
+- `sudo docker compose up -d` to start the database server
+- `yarn seed:product` or `npm run seed:product`
+then run `docker compose up --build` to start the app again
 
 Make sure you have `yarn` or `npm` installed
